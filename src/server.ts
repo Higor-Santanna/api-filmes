@@ -1,28 +1,38 @@
 import { PrismaClient } from "@prisma/client";
 import express from "express";
-const  router  = require('./routes/movieRoutes')
+//const  router  = require('./routes/movieRoutes')
 
 const port = 3000;
 const app = express();
 const prisma = new PrismaClient();
 
-// app.get("/movies", async (_, res) => {
-//    const movies = await prisma.movie.findMany({
-//        orderBy: {
-//            title: "asc",
-//        },
-//        include: {
-//            genres: true,
-//            languages: true
-//        }
-//    });
+app.use(express.json());
+app.get("/movies", async (_, res) => {
+    try {
+        const movies = await prisma.movie.findMany({
+            orderBy: {
+                title: "asc",
+            },
+            include: {
+                genres: true,
+                languages: true
+            }
+        });
+     
+        const getTotalMovies = await prisma.movie.count(); //pega a quantidade de filmes
+        let totalDuration = 0;
+        for(let movie of movies){
+            totalDuration += movie.duration
+        }
+        const averageDurationTime = getTotalMovies > 0 ? totalDuration / getTotalMovies : 0;
+        // res.json(movies);
+        res.json([movies,getTotalMovies,averageDurationTime]);  
+    } catch (error) {
+        
+    }
+});
 
-//    const getTotalMovies = await prisma.movie.count();
-//    // res.json(movies);
-//    res.json([movies,getTotalMovies]);
-// });
-
-app.use(router);
+//app.use(router);
 
 app.post("/movies", async (req, res) => {
 
@@ -49,13 +59,14 @@ app.post("/movies", async (req, res) => {
            }
        });
 
-       res.status(201).send();
+       res.status(201).send({ message: "Filme cadastrado" });
    } catch (error) {
        return res.status(500).send({ message: "Falha ao cadastrar o filme" })
    }
 
 });
 
+//Atualizando um filme
 app.put("/movies/:id", async (req, res) => {
    //Pegar o ID do registro que vai ser atualizado;
    const id = Number(req.params.id);
@@ -90,6 +101,7 @@ app.put("/movies/:id", async (req, res) => {
    res.status(200).send({ message: "Filme atualizado com sucesso" })
 })
 
+//Deletando filme
 app.delete('/movies/:id', async (req, res) => {
    const id = Number(req.params.id);
 
@@ -111,6 +123,7 @@ app.delete('/movies/:id', async (req, res) => {
    res.status(200).send({ message: 'Filme removido com sucesso' });
 });
 
+//Buscando todos os generos
 app.get("/movies/:genreName", async (req, res) => {
    try {
        const moviesFilteredByGenreName = await prisma.movie.findMany({

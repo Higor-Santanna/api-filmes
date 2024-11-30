@@ -1,8 +1,8 @@
-import express from "express"
-const router = express.Router();
-const { getMovies } = require("../controllers/moviesController");
-// const { errorHandler }  = require('../middlewares/moviesMiddleware');
+// import express from "express"
+// const router = express.Router();
+// const { getMovies,  getRegisterMovie} = require("../controllers/moviesController");
 
-router.get("/movies", getMovies);
+// router.get("/movies", getMovies);
+// router.post("/movies", getRegisterMovie);
 
-module.exports = router;
+// module.exports = router;

@@ -1,12 +1,20 @@
-import { PrismaClient } from "@prisma/client";
+// import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 
-//Serviço de buscar todos os filmes
-const getAllMovies = async () => {
-    return await prisma.movie.findMany();
-}
+// //Serviço de buscar todos os filmes
+// const getAllMovies = async () => {
+//     return await prisma.movie.findMany();
+// }
 
-module.exports = {
-    getAllMovies
-}
+// //Cadastrar um novo filme
+// const registerMovie = async (userData: any) => {
+//     return await prisma.movie.create({
+//         data: userData,
+//     });
+// }
+
+// module.exports = {
+//     getAllMovies,
+//     registerMovie
+// }
